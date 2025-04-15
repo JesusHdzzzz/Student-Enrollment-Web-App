@@ -7,14 +7,13 @@ import './Admin.css';
 function Admin() {
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [nextId, setNextId] = useState(1); // Initialize nextId
+    const [nextId, setNextId] = useState(1);
 
     useEffect(() => {
         const storedClasses = loadClassesFromStorage();
         setClasses(storedClasses);
         setLoading(false);
 
-        // Determine nextId based on loaded data
         if (storedClasses.length > 0) {
             const maxId = Math.max(0, ...storedClasses.map(c => typeof c.id === 'number' ? c.id : 0));
             setNextId(maxId + 1);
@@ -24,7 +23,13 @@ function Admin() {
     }, []);
 
     const addClass = (newClass) => {
-        const classToAdd = { ...newClass, id: nextId };
+        const classToAdd = {
+            ...newClass,
+            id: nextId,
+            teacherId: newClass.teacher,
+            students: 0,
+            enrolledStudents: [],
+        };
         setClasses([...classes, classToAdd]);
         saveClassesToStorage([...classes, classToAdd]);
         setNextId(nextId + 1);

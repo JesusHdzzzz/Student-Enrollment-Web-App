@@ -48,7 +48,3 @@ export function saveStudentEnrollment(enrollmentIds) {
     }
 }
 
-export function loadTeacherClasses(teacherId) {
-    const classes = loadClassesFromStorage();
-    return classes.filter(cls => cls.teacherId === teacherId);
-}

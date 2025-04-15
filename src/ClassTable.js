@@ -1,5 +1,5 @@
 import React from 'react';
-import './ClassTable.css'; // Create a ClassTable.css file
+import './ClassTable.css';
 
 function ClassTable({ classes, isAdmin, removeClass, enrollment, enroll, drop }) {
     const formatTime = (time) => {
@@ -21,7 +21,11 @@ function ClassTable({ classes, isAdmin, removeClass, enrollment, enroll, drop })
         <table>
             <thead>
                 <tr>
+<<<<<<< HEAD
                     <th>Course Name</th>
+=======
+                    <th>Class Name</th>
+>>>>>>> origin/Ernesto's-Branch
                     <th>Teacher's Name</th>
                     <th>Students Enrolled</th>
                     <th>Class Time</th>
@@ -31,11 +35,19 @@ function ClassTable({ classes, isAdmin, removeClass, enrollment, enroll, drop })
             </thead>
             <tbody>
                 {classes.length === 0 ? (
+<<<<<<< HEAD
                     <tr><td colSpan={isAdmin ? 4 : 4} style={{ textAlign: 'center' }}>No classes scheduled yet.</td></tr>
                 ) : (
                     classes.map(cls => (
                         <tr key={cls.id}>
                             <td>{escapeHTML(cls.course)}</td>
+=======
+                    <tr><td colSpan={isAdmin ? 5 : 4} style={{ textAlign: 'center' }}>No classes scheduled yet.</td></tr>
+                ) : (
+                    classes.map(cls => (
+                        <tr key={cls.id}>
+                            <td>{escapeHTML(cls.name)}</td>
+>>>>>>> origin/Ernesto's-Branch
                             <td>{escapeHTML(cls.teacher)}</td>
                             <td>{escapeHTML(cls.students)}</td>
                             <td>{formatTime(cls.time)}</td>

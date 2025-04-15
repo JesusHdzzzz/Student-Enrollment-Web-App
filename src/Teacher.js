@@ -4,7 +4,7 @@ import './Teacher.css';
 
 function Teacher() {
     const [classes, setClasses] = useState([]);
-    const [teacherId, setTeacherId] = useState('teacher1'); // static for simplicity
+    const [teacherId, setTeacherId] = useState('teacher'); // static for simplicity
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -13,6 +13,7 @@ function Teacher() {
         setClasses(myClasses);
         setLoading(false);
     }, [teacherId]);
+
 
     const handleGradeChange = (classId, studentId, newGrade) => {
         const updatedClasses = classes.map(cls => {
@@ -47,6 +48,7 @@ function Teacher() {
         return classes.map(cls => (
             <div key={cls.id} className="class-box">
                 <h3>{cls.name} (ID: {cls.id})</h3>
+                <p>Time: {cls.time}</p>
                 {cls.enrolledStudents && cls.enrolledStudents.length > 0 ? (
                     <table className="grade-table">
                         <thead>
