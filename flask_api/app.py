@@ -31,35 +31,36 @@ admin.add_view(ModelView(AdminModel, session))
 admin.add_view(ModelView(Grade, session))
 admin.add_view(ModelView(Course, session))
 
+# Login
 
 @app.route("/students/<name>", methods=["GET"])
 @cross_origin()
 def loginStudents(name):
     student = session.query(Student).filter_by(username=name).first()
     if student:
-        print({name: student.password})
         return jsonify({name: student.password})
     else:
         return jsonify({'error': 'Student not found'}), 404 # student doesn't exist
-
-'''
-@app.route("/students/<name>", methods=["POST"])
-def loginStudent(name):
-    student = session.query(Student).filter_by(username=name).first()
-    print(student.password)
-
-    if not student:
-        return jsonify({'error': 'Student not found'}), 404
-
-    # Read JSON body
-    data = request.get_json()
-    entered_password = data.get('password')
-
-    if entered_password == student.password:
-        return jsonify({'username': student.username, 'role': student.role})
+    
+@app.route("/teachers/<name>", methods=["GET"])
+@cross_origin()
+def loginTeachers(name):
+    teacher = session.query(Teacher).filter_by(username=name).first()
+    if teacher:
+        return jsonify({name: teacher.password})
     else:
-        return jsonify({'error': 'Invalid password'}), 403
-'''
+        return jsonify({'error': 'Teacher not found'}), 404 # student doesn't exist
+    
+@app.route("/admins/<name>", methods=["GET"])
+@cross_origin()
+def loginAdmins(name):
+    admin = session.query(AdminModel).filter_by(username=name).first()
+    if admin:
+        return jsonify({name: admin.password})
+    else:
+        return jsonify({'error': 'Admin not found'}), 404 # student doesn't exist
+
+
 @app.route('/')
 def home():
     return render_template('index.html')
