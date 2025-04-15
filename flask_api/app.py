@@ -37,6 +37,7 @@ admin.add_view(ModelView(Course, session))
 def loginStudents(name):
     student = session.query(Student).filter_by(username=name).first()
     if student:
+        print({name: student.password})
         return jsonify({name: student.password})
     else:
         return jsonify({'error': 'Student not found'}), 404 # student doesn't exist
