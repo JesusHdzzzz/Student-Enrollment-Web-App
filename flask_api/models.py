@@ -1,17 +1,12 @@
-from flask import Flask, render_template, request, jsonify
 from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
-import requests
-import logging
 
-app = Flask(__name__)
-
-app.logger.setLevel(logging.DEBUG)
-
+# Create the engine and session
 engine = create_engine('sqlite:///database.db')
 Session = sessionmaker(bind=engine)
 session = Session()
 
+# Create the base class for declarative models
 Base = declarative_base()
 
 class Student(Base):
@@ -21,8 +16,8 @@ class Student(Base):
     password = Column(String(50))
     
     admin_id = Column(Integer, ForeignKey('admins.id'))
-    admin = relationship('Admin', backref='student')
-
+    admin = relationship('Admin', backref='students')
+    
     grades = relationship('Grade', backref='student')
 
 class Teacher(Base):
@@ -30,12 +25,11 @@ class Teacher(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String(50))
     password = Column(String(50))
-
-    admin_id = Column(Integer, ForeignKey('admins.id'))
-    admin = relationship('Admin', backref='teacher')
-
-    courses = relationship('Course', backref='teacher')
     
+    admin_id = Column(Integer, ForeignKey('admins.id'))
+    admin = relationship('Admin', backref='teachers')
+    
+    courses = relationship('Course', backref='teacher')
     grades = relationship('Grade', backref='teacher')
 
 class Admin(Base):
@@ -43,27 +37,22 @@ class Admin(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String(50))
     password = Column(String(50))
-
+    
     courses = relationship('Course', backref='admin')
-    students = relationship('Student', backref='admin')
-    teachers = relationship('Teacher', backref='admin')
+    # These relationships are defined in Student and Teacher as backrefs:
+    # students = relationship('Student', backref='admin')
+    # teachers = relationship('Teacher', backref='admin')
+    grades = relationship('Grade', backref='admin')
 
 class Grade(Base):
     __tablename__ = 'grades'
     id = Column(Integer, primary_key=True)
-    course_id = Column(Integer)
-    course = relationship('Course', backref='grades')
+    course_id = Column(Integer, ForeignKey('courses.id'))
+    grade = Column(Float)
 
     student_id = Column(Integer, ForeignKey('students.id'))
-    student = relationship('Student', backref='grades')
-    
-    teacher = relationship('Teacher', backref='grades')
     teacher_id = Column(Integer, ForeignKey('teachers.id'))
-    
     admin_id = Column(Integer, ForeignKey('admins.id'))
-    admin = relationship('Admin', backref='grades')
-
-    grade = Column(Float)
 
 class Course(Base):
     __tablename__ = 'courses'
@@ -72,20 +61,12 @@ class Course(Base):
     teacher_name = Column(String(50))
     time_offered = Column(String(50))
     students_enrolled = Column(Integer)
-
+    
     teacher_id = Column(Integer, ForeignKey('teachers.id'))
-    teacher = relationship('Teacher', backref='courses')
-
     admin_id = Column(Integer, ForeignKey('admins.id'))
-    admin = relationship('Admin', backref='courses')
-
+    
     grades = relationship('Grade', backref='course')
 
-@app.route('/')
-def home():
-    return redner_template('index.html')
-
-Base.metadata.create_all(engine)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+# Optionally, you can include a helper function to create the tables.
+def init_db():
+    Base.metadata.create_all(engine)
