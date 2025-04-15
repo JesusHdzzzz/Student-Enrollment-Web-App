@@ -31,7 +31,7 @@ admin.add_view(ModelView(AdminModel, session))
 admin.add_view(ModelView(Grade, session))
 admin.add_view(ModelView(Course, session))
 
-@app.route('/api/students/<student>')
+@app.route('/api/students/<student>', methods=["GET"])
 def loginStudent(name, password):
     student = Student.query.filter_by(username=name).first()
 

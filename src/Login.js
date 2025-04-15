@@ -21,11 +21,9 @@ function Login({ onLogin }) { // Receive a callback function for login
 
             fetch(`${REST_API}/students/${name}`)
                 .then(response => response.text())
-                .then (text => {
-                    return JSON.parse(corrected);
-                })
                 .then (data => {
-                    
+                    username = name;
+                    password = data[name]
                 })
 
                 .catch(error => {
