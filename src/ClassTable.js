@@ -21,6 +21,7 @@ function ClassTable({ classes, isAdmin, removeClass, enrollment, enroll, drop })
         <table>
             <thead>
                 <tr>
+                    <th>Course Name</th>
                     <th>Teacher's Name</th>
                     <th>Students Enrolled</th>
                     <th>Class Time</th>
@@ -30,10 +31,11 @@ function ClassTable({ classes, isAdmin, removeClass, enrollment, enroll, drop })
             </thead>
             <tbody>
                 {classes.length === 0 ? (
-                    <tr><td colSpan={isAdmin ? 4 : 3} style={{ textAlign: 'center' }}>No classes scheduled yet.</td></tr>
+                    <tr><td colSpan={isAdmin ? 4 : 4} style={{ textAlign: 'center' }}>No classes scheduled yet.</td></tr>
                 ) : (
                     classes.map(cls => (
                         <tr key={cls.id}>
+                            <td>{escapeHTML(cls.course)}</td>
                             <td>{escapeHTML(cls.teacher)}</td>
                             <td>{escapeHTML(cls.students)}</td>
                             <td>{formatTime(cls.time)}</td>
