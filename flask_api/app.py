@@ -31,11 +31,11 @@ admin.add_view(ModelView(AdminModel, session))
 admin.add_view(ModelView(Grade, session))
 admin.add_view(ModelView(Course, session))
 
-# Login
+# Login ---------------------------------
 
 @app.route("/students/<name>", methods=["GET"])
 @cross_origin()
-def loginStudents(name):
+def getStudent(name):
     student = session.query(Student).filter_by(username=name).first()
     if student:
         return jsonify({name: student.password})
@@ -44,7 +44,7 @@ def loginStudents(name):
     
 @app.route("/teachers/<name>", methods=["GET"])
 @cross_origin()
-def loginTeachers(name):
+def getTeacher(name):
     teacher = session.query(Teacher).filter_by(username=name).first()
     if teacher:
         return jsonify({name: teacher.password})
@@ -53,12 +53,48 @@ def loginTeachers(name):
     
 @app.route("/admins/<name>", methods=["GET"])
 @cross_origin()
-def loginAdmins(name):
+def getAdmin(name):
     admin = session.query(AdminModel).filter_by(username=name).first()
     if admin:
         return jsonify({name: admin.password})
     else:
         return jsonify({'error': 'Admin not found'}), 404 # student doesn't exist
+    
+# Add class -----------------------------
+
+@app.route("/courses", methods=["POST"])
+@cross_origin()
+def addClass():
+    classes = request.get_json()
+    class_name = classes.get("course_name")
+    class_teacher = classes.get("course_teacher")
+    class_time = classes.get("course_time")
+
+    entry = Course(name=class_name, teacher_name=class_teacher, time_offered=class_time, students_enrolled=0)
+    session.add(entry)
+    session.commit()
+
+    return jsonify({"message": "Course added"})
+
+# Get Classes ----------------------------
+
+@app.route("/courses", methods=["GET"])
+@cross_origin()
+def getClasses():
+    all = session.query(Course).all()
+    classes = {}
+
+    for cls in all:
+        classes.append({
+            "id": cls.id,
+            "name": cls.name,
+            "teacher": cls.teacher_name,
+            "time": cls.time_offered,
+            "students_enrolled": cls.students_enrolled
+        })
+
+    return jsonify(classes)
+
 
 
 @app.route('/')

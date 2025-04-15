@@ -8,6 +8,30 @@ function AddClassForm({ onAddClass }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        /*
+        const course_name = name;
+        const course_teacher = teacher;
+        const course_time = time.toString();
+        const course = {course_name, course_teacher, course_time};
+        console.log(course);
+
+        fetch('http://127.0.0.1:5000/courses', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(course),
+        })
+            .then(response => {return response.json})
+            .then(data => {
+                console.log(course);
+            })
+
+        .catch(error => {
+            console.error('Error adding course:', error);
+        });
+        */
         onAddClass({ name, teacher, time }); // Pass 'name' in the object
         setName('');
         setTeacher('');
