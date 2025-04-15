@@ -47,3 +47,8 @@ export function saveStudentEnrollment(enrollmentIds) {
         alert("Could not save enrollment status.");
     }
 }
+
+export function loadTeacherClasses(teacherId) {
+    const classes = loadClassesFromStorage();
+    return classes.filter(cls => cls.teacherId === teacherId);
+}
