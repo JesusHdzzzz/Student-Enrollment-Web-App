@@ -1,37 +1,41 @@
 import React, { useState } from 'react';
-import './AddClassForm.css'; // Create an AddClassForm.css file
+import './AddClassForm.css';
 
 function AddClassForm({ onAddClass }) {
-    const [teacherName, setTeacherName] = useState('');
-    const [studentCount, setStudentCount] = useState('');
-    const [classTime, setClassTime] = useState('');
+    const [name, setName] = useState('');
+    const [teacher, setTeacher] = useState('');
+    const [time, setTime] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!teacherName || !studentCount || !classTime) {
-            alert('Please fill in all fields.');
-            return;
-        }
-        onAddClass({ teacher: teacherName, students: parseInt(studentCount, 10), time: classTime });
-        setTeacherName('');
-        setStudentCount('');
-        setClassTime('');
+        onAddClass({ name, teacher, time }); // Pass 'name' in the object
+        setName('');
+        setTeacher('');
+        setTime('');
     };
 
     return (
-        <form id="add-class-form" onSubmit={handleSubmit}>
-            <div className="form-group">
-                <label htmlFor="teacher-name">Teacher's Name:</label>
-                <input type="text" id="teacher-name" value={teacherName} onChange={(e) => setTeacherName(e.target.value)} required />
-            </div>
-            <div className="form-group">
-                <label htmlFor="student-count">Number of Students Enrolled:</label>
-                <input type="number" id="student-count" min="0" value={studentCount} onChange={(e) => setStudentCount(e.target.value)} required />
-            </div>
-            <div className="form-group">
-                <label htmlFor="class-time">Class Time:</label>
-                <input type="time" id="class-time" value={classTime} onChange={(e) => setClassTime(e.target.value)} required />
-            </div>
+        <form onSubmit={handleSubmit}>
+            <input
+                type="text"
+                value={name} // Input for class name
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Class Name"
+                required
+            />
+            <input
+                type="text"
+                value={teacher}
+                onChange={(e) => setTeacher(e.target.value)}
+                placeholder="Teacher's Name"
+                required
+            />
+            <input
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                required
+            />
             <button type="submit">Add Class</button>
         </form>
     );
