@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css'; // Create a Login.css for styling
 
-const REST_API = "/api";
-
 function Login({ onLogin }) { // Receive a callback function for login
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -14,27 +12,56 @@ function Login({ onLogin }) { // Receive a callback function for login
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        function login(event) {
-            event.preventDefault();
+        let user;
 
-            const name = document.getElementById("username").value;
-
-            fetch(`${REST_API}/students/${name}`)
-                .then(response => response.text())
-                .then (data => {
-                    username = name;
-                    password = data[name]
-                })
-
-                .catch(error => {
-                    console.error('Error fetching student:', error)
-                    alert("Error");
-                });
+        const name = username;
+        /*
+        try {
+            const response = await fetch(`/api/students/${username}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ password }),
+            });
+    
+            const data = await response.json();
+            console.log('Server response:', data);
+    
+            if (response.ok && data.username && data.role) {
+                onLogin({ username: data.username, role: data.role });
+                navigate('/');
+            } else {
+                alert(data.error || 'Login failed');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            alert('Something went wrong');
         }
+    };
+        */
+        fetch(`http://localhost:5000/students/student1`)
+            .then(response => {response.json()})
+            .then (data => {
+                if (password === data[name]) {
+                    user = { username: name, role: data[name]};
+                }
+                else {
+                    console.log(data);
+                    alert('Invalid credentials');
+                }
+            })
 
+            .catch(error => {
+                console.error('Error fetching credentials:', error)
+                alert('Error');
+            });
+        
+        /*
         // **IMPORTANT:** Replace this with your actual authentication logic!
         // This is a simplified example. In a real app, you'd send the
         // username/password to a server for verification.
+
         let user;
         if (username === 'admin' && password === 'admin') {
             user = { username: 'admin', role: 'admin' };
@@ -46,7 +73,8 @@ function Login({ onLogin }) { // Receive a callback function for login
             alert('Invalid credentials');
             return;
         }
-
+            */
+        
         if (user) {
             onLogin(user); // Send user data back to App.js
             navigate('/');  // Redirect to home page after login
