@@ -31,6 +31,18 @@ admin.add_view(ModelView(AdminModel, session))
 admin.add_view(ModelView(Grade, session))
 admin.add_view(ModelView(Course, session))
 
+@app.route('/api/students/<student>')
+def loginStudent(name, password):
+    student = Student.query.filter_by(username=name).first()
+
+    if student:
+        if student.password == password:
+            return {"username":name}
+        else:
+            return # wrong password
+    else:
+        return # student doesn't exist
+
 @app.route('/')
 def home():
     return render_template('index.html')

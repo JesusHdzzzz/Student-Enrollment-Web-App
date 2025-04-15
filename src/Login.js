@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css'; // Create a Login.css for styling
 
+const REST_API = "/api";
+
 function Login({ onLogin }) { // Receive a callback function for login
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -11,6 +13,26 @@ function Login({ onLogin }) { // Receive a callback function for login
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        function login(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("username").value;
+
+            fetch(`${REST_API}/students/${name}`)
+                .then(response => response.text())
+                .then (text => {
+                    return JSON.parse(corrected);
+                })
+                .then (data => {
+                    
+                })
+
+                .catch(error => {
+                    console.error('Error fetching student:', error)
+                    alert("Error");
+                });
+        }
 
         // **IMPORTANT:** Replace this with your actual authentication logic!
         // This is a simplified example. In a real app, you'd send the
