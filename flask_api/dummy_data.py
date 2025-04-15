@@ -1,88 +1,93 @@
 # dummy_data.py
 
 import os
+import random
 from models import session, Admin, Teacher, Student, Grade, Course
 
 def insert_dummy_data():
-    # Print working directory and absolute path of the database file.
+    # Print current working directory and expected database file location.
     cwd = os.getcwd()
     db_path = os.path.abspath("database.db")
     print(f"Working directory: {cwd}")
     print(f"Database file should be at: {db_path}")
     
     try:
-        # --- Create an Admin ---
+        # --- Create Admin ---
         admin1 = Admin(username="admin1", password="secret")
         session.add(admin1)
-        session.commit()  # Commit so that admin1 gets an ID
+        session.commit()  # Admin ID is now available.
         print(f"Admin inserted with ID: {admin1.id}")
 
         # --- Create Teachers ---
-        teacher1 = Teacher(username="teacher1", password="password1", admin=admin1)
-        teacher2 = Teacher(username="teacher2", password="password2", admin=admin1)
-        session.add_all([teacher1, teacher2])
-        session.commit()
-        print(f"Teachers inserted with IDs: {teacher1.id}, {teacher2.id}")
+        teacher_names = ["alice", "bob", "charlie"]
+        teachers = []
+        for name in teacher_names:
+            teacher = Teacher(username=name, password=f"pass_{name}", admin=admin1)
+            session.add(teacher)
+            session.commit()  # Ensure each teacher gets an ID.
+            teachers.append(teacher)
+            print(f"Teacher inserted: {teacher.username} (ID: {teacher.id})")
 
         # --- Create Students ---
-        student1 = Student(username="student1", password="password1", admin=admin1)
-        student2 = Student(username="student2", password="password2", admin=admin1)
-        student3 = Student(username="student3", password="password3", admin=admin1)
-        session.add_all([student1, student2, student3])
-        session.commit()
-        print(f"Students inserted with IDs: {student1.id}, {student2.id}, {student3.id}")
+        student_names = [f"student{i}" for i in range(1, 11)]  # 10 students: student1, student2, ..., student10
+        students = []
+        for s in student_names:
+            student = Student(username=s, password=f"pass_{s}", admin=admin1)
+            session.add(student)
+            session.commit()  # Commit to assign an ID.
+            students.append(student)
+            print(f"Student inserted: {student.username} (ID: {student.id})")
 
         # --- Create Courses ---
-        # Create and flush each course to assign an ID.
-        course1 = Course(
-            name="Math 101",
-            teacher_name=teacher1.username,
-            time_offered="MonWedFri 9-10am",
-            students_enrolled=30,
-            teacher=teacher1,
-            admin=admin1
-        )
-        session.add(course1)
-        session.flush()  # Flush so that course1 gets an ID
-        print(f"Course1 inserted with ID: {course1.id}")
+        courses_data = [
+            {"name": "Mathematics", "time_offered": "MonWedFri 9-10am"},
+            {"name": "History", "time_offered": "TueThu 11-12pm"},
+            {"name": "Biology", "time_offered": "MonWed 1-2pm"},
+            {"name": "Computer Science", "time_offered": "TueThu 2-3pm"},
+            {"name": "Economics", "time_offered": "Fri 10-12am"},
+        ]
+        courses = []
+        for i, data in enumerate(courses_data):
+            # Assign teachers round-robin.
+            teacher = teachers[i % len(teachers)]
+            course = Course(
+                name=data["name"],
+                teacher_name=teacher.username,
+                time_offered=data["time_offered"],
+                students_enrolled=0,  # We'll update this count as students enroll.
+                teacher=teacher,
+                admin=admin1
+            )
+            session.add(course)
+            session.commit()  # Commit to assign course ID.
+            courses.append(course)
+            print(f"Course inserted: {course.name} (ID: {course.id})")
         
-        course2 = Course(
-            name="History 202",
-            teacher_name=teacher2.username,
-            time_offered="TueThu 11am-12pm",
-            students_enrolled=25,
-            teacher=teacher2,
-            admin=admin1
-        )
-        session.add(course2)
-        session.flush()  # Flush so that course2 gets an ID
-        print(f"Course2 inserted with ID: {course2.id}")
+        # --- Enroll Students in Courses ---
+        # For each student, enroll in 2 to 4 random courses.
+        for student in students:
+            num_courses = random.randint(2, 4)
+            selected_courses = random.sample(courses, num_courses)
+            for course in selected_courses:
+                student.courses.append(course)
+                # Increase the students_enrolled count.
+                course.students_enrolled = (course.students_enrolled or 0) + 1
+            session.commit()
+            print(f"{student.username} enrolled in {num_courses} courses.")
         
-        session.commit()  # Final commit for courses
-
-        # --- Create Grades ---
-        grade1 = Grade(
-            course_id=course1.id,
-            student_id=student1.id,
-            teacher_id=teacher1.id,
-            admin_id=admin1.id,
-            grade=95.0
-        )
-        grade2 = Grade(
-            course_id=course1.id,
-            student_id=student2.id,
-            teacher_id=teacher1.id,
-            admin_id=admin1.id,
-            grade=87.0
-        )
-        grade3 = Grade(
-            course_id=course2.id,
-            student_id=student3.id,
-            teacher_id=teacher2.id,
-            admin_id=admin1.id,
-            grade=92.0
-        )
-        session.add_all([grade1, grade2, grade3])
+        # --- Create Grades for Each Enrollment ---
+        # For each student, create a Grade record for each course they're enrolled in.
+        for student in students:
+            for course in student.courses:
+                grade_value = round(random.uniform(60, 100), 2)  # Random grade between 60 and 100.
+                grade = Grade(
+                    course_id=course.id,
+                    student_id=student.id,
+                    teacher_id=course.teacher.id,
+                    admin_id=admin1.id,
+                    grade=grade_value
+                )
+                session.add(grade)
         session.commit()
         print("Grades inserted successfully!")
         

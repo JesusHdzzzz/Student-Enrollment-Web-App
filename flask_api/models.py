@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey
+from sqlalchemy import create_engine, Table, Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 
 # Create the engine and session
@@ -9,6 +9,11 @@ session = Session()
 # Create the base class for declarative models
 Base = declarative_base()
 
+student_courses = Table('student_courses', Base.metadata,
+    Column('student_id', Integer, ForeignKey('students.id'), primary_key=True),
+    Column('course_id', Integer, ForeignKey('courses.id'), primary_key=True)
+)
+
 class Student(Base):
     __tablename__ = 'students'
     id = Column(Integer, primary_key=True)
@@ -17,6 +22,9 @@ class Student(Base):
     
     admin_id = Column(Integer, ForeignKey('admins.id'))
     admin = relationship('Admin', backref='students')
+    
+    # Many-to-many relationship with Course.
+    courses = relationship('Course', secondary=student_courses, back_populates='students')
     
     grades = relationship('Grade', backref='student')
 
@@ -39,9 +47,6 @@ class Admin(Base):
     password = Column(String(50))
     
     courses = relationship('Course', backref='admin')
-    # These relationships are defined in Student and Teacher as backrefs:
-    # students = relationship('Student', backref='admin')
-    # teachers = relationship('Teacher', backref='admin')
     grades = relationship('Grade', backref='admin')
 
 class Grade(Base):
@@ -64,6 +69,9 @@ class Course(Base):
     
     teacher_id = Column(Integer, ForeignKey('teachers.id'))
     admin_id = Column(Integer, ForeignKey('admins.id'))
+    
+    # Many-to-many relationship with Student.
+    students = relationship('Student', secondary=student_courses, back_populates='courses')
     
     grades = relationship('Grade', backref='course')
 
