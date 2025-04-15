@@ -1,0 +1,149 @@
+/* === styles.css === */
+
+/* Base styles */
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+    background-color: #f4f4f4;
+    /* Add padding to prevent content overlap with absolutely positioned nav */
+    padding-top: 60px;
+    /* Needed for absolute positioning of nav */
+    position: relative;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1, h2 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Form styles (Primarily for Admin page) */
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="time"] {
+    width: 95%; /* Adjust width to prevent overflow */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Button styles */
+button {
+    /* Base style for buttons, used by Enroll */
+    display: inline-block;
+    padding: 8px 12px; /* Standard padding for table buttons */
+    background-color: #5cb85c; /* Green */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em; /* Standard font size for table buttons */
+    margin-right: 5px;
+    vertical-align: middle; /* Align buttons nicely if text wraps */
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+/* Specific button styles */
+button.enroll-btn {
+    /* Inherits base button style */
+     background-color: #5cb85c; /* Green */
+}
+
+button.drop-btn {
+    /* Inherits base button style, just change color */
+    background-color: #d9534f; /* Red */
+}
+
+/* Admin page specific button styles */
+#add-class-form button[type="submit"] {
+    /* Style for the main Add Class button might be larger */
+    padding: 10px 15px;
+    font-size: 1em;
+}
+
+button.remove-btn {
+    /* Style specifically for admin remove button in table */
+     background-color: #d9534f; /* Red */
+     /* Keep consistent with other table buttons */
+     padding: 8px 12px;
+     font-size: 0.9em;
+}
+
+/* Admin Form specific styles */
+#add-class-form {
+    border: 1px solid #eee;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+/* --- Navigation Styles --- */
+.nav-container {
+    position: absolute; /* Position relative to body */
+    top: 15px;
+    right: 20px;
+    z-index: 10; /* Ensure it's above other content if needed */
+}
+
+.nav-button {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #007bff; /* Blue for navigation */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 0.9em;
+    border: none;
+    cursor: pointer;
+    margin-left: 5px; /* Add space between nav buttons */
+}
+
+.nav-button:hover {
+    background-color: #0056b3;
+}
+
+/* === End of styles.css === */

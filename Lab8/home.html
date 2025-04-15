@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Classes - Home</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="nav-container">
+        <a href="admin.html" class="nav-button">Go to Admin Page</a>
+        <a href="student.html" class="nav-button" style="margin-left: 5px;">Student Portal</a>
+    </div>
+
+    <div class="container">
+        <h1>Available School Classes</h1>
+
+        <table id="class-table-home">
+            <thead>
+                <tr>
+                    <th>Teacher's Name</th>
+                    <th>Students Enrolled</th>
+                    <th>Class Time</th>
+                    </tr>
+            </thead>
+            <tbody id="class-list-home">
+                <tr>
+                    <td colspan="3" style="text-align:center;">Loading classes...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="home_script.js" defer></script>
+
+</body>
+</html>

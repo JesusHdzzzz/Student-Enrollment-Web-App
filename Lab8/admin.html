@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Management - Admin</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="nav-container">
+         <a href="home.html" class="nav-button">View Classes (Home)</a>
+         <a href="student.html" class="nav-button" style="margin-left: 5px;">Student Portal</a>
+    </div>
+
+    <div class="container">
+        <h1>Class Schedule Administration</h1>
+
+        <h2>Current Classes (Editable)</h2>
+        <table id="class-table-admin">
+            <thead>
+                <tr>
+                    <th>Teacher's Name</th>
+                    <th>Students Enrolled</th>
+                    <th>Class Time</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="class-list-admin">
+                <tr>
+                    <td colspan="4" style="text-align:center;">Loading classes...</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Add New Class</h2>
+        <form id="add-class-form">
+            <div class="form-group">
+                <label for="teacher-name">Teacher's Name:</label>
+                <input type="text" id="teacher-name" required>
+            </div>
+            <div class="form-group">
+                <label for="student-count">Number of Students Enrolled:</label>
+                <input type="number" id="student-count" min="0" required>
+            </div>
+            <div class="form-group">
+                <label for="class-time">Class Time:</label>
+                <input type="time" id="class-time" required>
+            </div>
+            <button type="submit">Add Class</button>
+        </form>
+    </div>
+
+    <script src="admin_script.js" defer></script>
+
+</body>
+</html>

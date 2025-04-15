@@ -1,0 +1,34 @@
+/* AddClassForm.css */
+
+#add-class-form {
+    border: 1px solid #eee;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="time"] {
+    width: 95%;
+    /* Adjust width to prevent overflow */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#add-class-form button[type="submit"] {
+    /* Style for the main Add Class button might be larger */
+    padding: 10px 15px;
+    font-size: 1em;
+}
